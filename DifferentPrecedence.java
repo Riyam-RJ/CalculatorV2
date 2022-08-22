@@ -34,25 +34,25 @@ public class DifferentPrecedence {
         for(String s: sNumList)
             dNumList.add(Double.parseDouble(s));
 
-        // step-1 iterate to evaluate ,/
-        do {
-            int index = 0;
-            do {
-                if (opList.get(index) == '/' || opList.get(index) == '*') {
-                    double num1 = dNumList.get(index);
-                    double num2 = dNumList.get(index + 1);
-                    double newValue;
-                    if (opList.get(index) == '/') newValue = num1 / num2;
-                    else newValue = num1 * num2;
-                    opList.remove(index);
-                    dNumList.set(index, newValue);
-                    dNumList.remove(index + 1);
-                }
-                index++;
-            } while (index < opList.size());
-        }while (opList.contains('*') || opList.contains('/')); // scan for another * or /
+        // step-1 iterate to evaluate '/'
+        while(opList.contains('/')) {
+            int index = opList.indexOf('/');
+            double newValue = dNumList.get(index) / dNumList.get(index+1);
+            dNumList.set(index, newValue);
+            opList.remove(index);
+            dNumList.remove(index+1);
+        }
 
-        // step-2 evaluate for +,-
+        // step-1 iterate to evaluate '*'
+        while(opList.contains('*')) {
+            int index = opList.indexOf('*');
+            double newValue = dNumList.get(index) * dNumList.get(index+1);
+            dNumList.set(index, newValue);
+            opList.remove(index);
+            dNumList.remove(index+1);
+        }
+
+        // step-3 evaluate for +,-
         result=dNumList.get(0);
         for(int i=0;i<opList.size();i++){
             if(opList.get(i)=='+')
